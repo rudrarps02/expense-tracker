@@ -3,6 +3,10 @@ from django.db.models import Sum
 from .models import Expense
 from .forms import ExpenseForm
 from datetime import date
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from .serializers import ExpenseSerializer
 
 def index(request):
     expenses = Expense.objects.all()
@@ -40,4 +44,23 @@ def add_expense(request):
 def delete_expense(request, pk):
     expense = get_object_or_404(Expense, pk=pk)
     expense.delete()
+
+    from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from .serializers import ExpenseSerializer
+
+@api_view(['GET', 'POST'])
+def expense_api_list(request):
+    if request.method == 'GET':
+        expenses = Expense.objects.all()
+        serializer = ExpenseSerializer(expenses, many=True)
+        return Response(serializer.data)
+        
+    elif request.method == 'POST':
+        serializer = ExpenseSerializer(data=request.POST or request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     return redirect('index')
