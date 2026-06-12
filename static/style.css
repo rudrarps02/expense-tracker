@@ -1,0 +1,260 @@
+:root {
+    --bg-main: #0f172a;
+    --bg-card: #1e293b;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --accent: #10b981;
+    --accent-hover: #059669;
+    --danger: #ef4444;
+    --danger-hover: #dc2626;
+    --border: #334155;
+    --input-bg: #0f172a;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    line-height: 1.5;
+}
+
+/* Navbar */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 2rem;
+    background-color: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+}
+
+nav .logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+nav a {
+    color: var(--text-muted);
+    text-decoration: none;
+    margin-left: 1.5rem;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+nav a:hover {
+    color: var(--accent);
+}
+
+/* Main Layout */
+main {
+    max-width: 800px;
+    margin: 3rem auto;
+    padding: 0 1.5rem;
+}
+
+/* Dashboard UI */
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.summary-card {
+    background: linear-gradient(135deg, #064e3b 0%, #1e293b 100%);
+    padding: 2.5rem;
+    border-radius: 1rem;
+    border: 1px solid var(--border);
+    text-align: center;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.summary-card .label {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+}
+
+.summary-card .total {
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--accent);
+}
+
+/* Filters */
+.filters form {
+    display: flex;
+    justify-content: flex-end;
+}
+
+select {
+    background-color: var(--bg-card);
+    color: var(--text-main);
+    border: 1px solid var(--border);
+    padding: 0.6rem 1.5rem;
+    border-radius: 0.5rem;
+    outline: none;
+    cursor: pointer;
+    font-size: 0.95rem;
+}
+
+/* Expense Items */
+.expense-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.expense-item {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 1.25rem 1.5rem;
+    border-radius: 0.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.expense-item:hover {
+    transform: translateY(-2px);
+    border-color: #475569;
+}
+
+.expense-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.expense-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.expense-meta {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.expense-right {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.expense-amount {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #f43f5e;
+}
+
+.delete-btn {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.delete-btn:hover {
+    color: var(--danger);
+}
+
+/* Forms UI */
+.form-container {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 2.5rem;
+    border-radius: 1rem;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.form-container h2 {
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.form-group input, .form-group select {
+    width: 100%;
+    background-color: var(--input-bg);
+    color: var(--text-main);
+    border: 1px solid var(--border);
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    outline: none;
+}
+
+.form-group input:focus, .form-group select:focus {
+    border-color: var(--accent);
+}
+
+/* Buttons */
+button, .btn-primary, .btn-secondary {
+    display: inline-block;
+    width: 100%;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.2s;
+    margin-bottom: 0.75rem;
+}
+
+.btn-primary, button[type="submit"] {
+    background-color: var(--accent);
+    color: #fff;
+}
+
+.btn-primary:hover, button[type="submit"]:hover {
+    background-color: var(--accent-hover);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+    color: var(--text-main);
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.empty-msg {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 2rem;
+}
+
+.empty-msg a {
+    color: var(--accent);
+    text-decoration: none;
+}

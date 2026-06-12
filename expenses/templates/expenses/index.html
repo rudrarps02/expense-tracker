@@ -1,0 +1,41 @@
+{% extends 'expenses/base.html' %}
+{% block content %}
+
+<div class="dashboard">
+    <div class="summary-card">
+        <p class="label">Total Spent</p>
+        <h1 class="total">₹{{ total }}</h1>
+    </div>
+
+    <div class="filters">
+        <form method="GET">
+            <select name="category" onchange="this.form.submit()">
+                <option value="">All Categories</option>
+                {% for cat in categories %}
+                <option value="{{ cat }}" {% if selected_category == cat %}selected{% endif %}>
+                    {{ cat|capfirst }}
+                </option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+
+    <div class="expense-list">
+        {% for expense in expenses %}
+        <div class="expense-item">
+            <div class="expense-info">
+                <span class="expense-title">{{ expense.title }}</span>
+                <span class="expense-meta">{{ expense.category|capfirst }} · {{ expense.date }}</span>
+            </div>
+            <div class="expense-right">
+                <span class="expense-amount">₹{{ expense.amount }}</span>
+                <a href="{% url 'delete_expense' expense.pk %}" class="delete-btn" onclick="return confirm('Delete?')">✕</a>
+            </div>
+        </div>
+        {% empty %}
+        <p class="empty-msg">No expenses yet. <a href="{% url 'add_expense' %}">Add one!</a></p>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
