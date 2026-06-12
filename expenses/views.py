@@ -56,11 +56,10 @@ def expense_api_list(request):
         expenses = Expense.objects.all()
         serializer = ExpenseSerializer(expenses, many=True)
         return Response(serializer.data)
-        
+
     elif request.method == 'POST':
         serializer = ExpenseSerializer(data=request.POST or request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    return redirect('index')
