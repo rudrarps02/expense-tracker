@@ -1,38 +1,43 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Sum
-from .models import Expense
-from .forms import ExpenseForm
 from datetime import date
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+
+from .models import Expense
+from .forms import ExpenseForm
 from .serializers import ExpenseSerializer
 
+# ==========================================
+# 1. CORE DASHBOARD & INDEX VIEW
+# ==========================================
 def index(request):
-    # Fetch all base expenses
+    # Fetch all base expenses linked to the user dataset
     expenses = Expense.objects.all()
-    
-    # 1. Category filter logic
+
+    # 1. Category filter logic query matching
     category = request.GET.get('category', '')
     if category:
         expenses = expenses.filter(category=category)
-        
-    # 2. Month filter logic
+
+    # 2. Month filter logic query matching
     month = request.GET.get('month', '')
     if month:
         expenses = expenses.filter(date__month=month)
-        
-    # 3. Calculate total spend metric
+
+    # 3. Calculate total spend metric aggregation safely
     total = expenses.aggregate(Sum('amount'))['amount__sum'] or 0
-    
-    # 4. Aggregate category dataset mapping for Chart.js
-    category_data = expenses.values('category').annotate(total_amount=Sum('amount'))
+
+    # 4. Aggregate category dataset mappings cleanly for Chart.js
+    category_data = expenses.values('category').annotate(total_spent_val=Sum('amount'))
     chart_labels = [item['category'].capitalize() for item in category_data]
-    chart_values = [float(item['total_amount']) for item in category_data]
-    
-    # 5. Core select options array
+    chart_values = [float(item['total_spent_val']) for item in category_data]
+
+    # 5. Core select options dropdown categories array
     categories = ['food', 'transport', 'shopping', 'bills', 'health', 'other']
-    
+
+    # 6. Unified context dictionary payload mapping
     context = {
         'expenses': expenses,
         'total': total,
@@ -41,27 +46,14 @@ def index(request):
         'chart_labels': chart_labels,
         'chart_values': chart_values,
     }
-    # Direct the engine output cleanly to your core index frame
-    # Filter by category
-    category = request.GET.get('category', '')
-    if category:
-        expenses = expenses.filter(category=category)
 
-    # Filter by month
-    month = request.GET.get('month', '')
-    if month:
-        expenses = expenses.filter(date__month=month)
-
-    total = expenses.aggregate(Sum('amount'))['amount__sum'] or 0
-
-    context = {
-        'expenses': expenses,
-        'total': total,
-        'categories': ['food', 'transport', 'shopping', 'bills', 'health', 'other'],
-        'selected_category': category,
-    }
+    # Direct the engine output cleanly to your core index frame template
     return render(request, 'expenses/index.html', context)
 
+
+# ==========================================
+# 2. ADD EXPENSE TRANSACTION
+# ==========================================
 def add_expense(request):
     if request.method == 'POST':
         form = ExpenseForm(request.POST)
@@ -70,17 +62,22 @@ def add_expense(request):
             return redirect('index')
     else:
         form = ExpenseForm(initial={'date': date.today()})
+    
     return render(request, 'expenses/add.html', {'form': form})
 
+
+# ==========================================
+# 3. DELETE EXPENSE TRANSACTION
+# ==========================================
 def delete_expense(request, pk):
     expense = get_object_or_404(Expense, pk=pk)
     expense.delete()
+    return redirect('index')
 
-    from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework import status
-from .serializers import ExpenseSerializer
 
+# ==========================================
+# 4. DJANGO REST FRAMEWORK API ENDPOINTS
+# ==========================================
 @api_view(['GET', 'POST'])
 def expense_api_list(request):
     if request.method == 'GET':
@@ -89,7 +86,7 @@ def expense_api_list(request):
         return Response(serializer.data)
 
     elif request.method == 'POST':
-        serializer = ExpenseSerializer(data=request.POST or request.data)
+        serializer = ExpenseSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
