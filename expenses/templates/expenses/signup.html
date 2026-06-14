@@ -1,0 +1,41 @@
+{% extends 'expenses/base.html' %}
+{% block content %}
+<div class="auth-container" style="font-family: sans-serif; padding: 40px 20px; max-width: 400px; margin: auto;">
+    <div class="auth-card" style="background: #1e293b; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+        <h2 style="color: #f8fafc; text-align: center; margin-top: 0; margin-bottom: 25px;">Create Account</h2>
+        
+        <form method="POST" style="display: flex; flex-direction: column; gap: 15px;">
+            {% csrf_token %}
+            
+            {% if form.errors %}
+                <div style="color: #e71d36; font-size: 0.85rem; background: rgba(231, 29, 54, 0.1); padding: 10px; border-radius: 6px;">
+                    Please check the password requirements.
+                </div>
+            {% endif %}
+
+            {% for field in form %}
+                <div class="form-group" style="display: flex; flex-direction: column; gap: 5px;">
+                    <label style="color: #94a3b8; font-size: 0.9rem;">{{ field.label }}</label>
+                    {{ field }}
+                    {% for error in field.errors %}
+                        <span style="color: #e71d36; font-size: 0.8rem;">{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+
+            <button type="submit" style="background: #2ec4b6; color: #0f172a; border: none; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px;">
+                Register & Explore
+            </button>
+        </form>
+
+        <p style="color: #64748b; text-align: center; font-size: 0.9rem; margin-top: 20px; margin-bottom: 0;">
+            Already have an account? <a href="{% url 'login' %}" style="color: #2ec4b6; text-decoration: none; font-weight: 600;">Log in here</a>
+        </p>
+    </div>
+</div>
+
+<style>
+    .form-group input { background: #0f172a !important; color: #f8fafc !important; border: 1px solid #334155 !important; padding: 10px !important; border-radius: 6px !important; outline: none !important; width: 100%; box-sizing: border-box; }
+    .form-group ul { color: #64748b; font-size: 0.75rem; padding-left: 15px; margin: 5px 0; }
+</style>
+{% endblock %}

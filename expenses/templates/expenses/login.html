@@ -1,0 +1,40 @@
+{% extends 'expenses/base.html' %}
+{% block content %}
+<div class="auth-container" style="font-family: sans-serif; padding: 40px 20px; max-width: 400px; margin: auto;">
+    <div class="auth-card" style="background: #1e293b; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+        <h2 style="color: #f8fafc; text-align: center; margin-top: 0; margin-bottom: 25px;">Welcome Back</h2>
+        
+        <form method="POST" style="display: flex; flex-direction: column; gap: 15px;">
+            {% csrf_token %}
+            
+            {% if form.errors %}
+                <p style="color: #e71d36; font-size: 0.9rem; text-align: center; margin: 0;">Invalid username or password.</p>
+            {% endif %}
+
+            <div class="form-group" style="display: flex; flex-direction: column; gap: 5px;">
+                <label style="color: #94a3b8; font-size: 0.9rem;">Username</label>
+                <input type="text" name="username" required style="background: #0f172a; color: #f8fafc; border: 1px solid #334155; padding: 12px; border-radius: 6px; outline: none;">
+            </div>
+
+            <div class="form-group" style="display: flex; flex-direction: column; gap: 5px;">
+                <label style="color: #94a3b8; font-size: 0.9rem;">Password</label>
+                <input type="password" name="password" required style="background: #0f172a; color: #f8fafc; border: 1px solid #334155; padding: 12px; border-radius: 6px; outline: none;">
+            </div>
+
+            {% if form.captcha %}
+                <div class="form-group" style="display: flex; flex-direction: column; gap: 5px; color: #f8fafc;">
+                    {{ form.captcha }}
+                </div>
+            {% endif %}
+
+            <button type="submit" style="background: #2ec4b6; color: #0f172a; border: none; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px;">
+                Login
+            </button>
+        </form>
+
+        <p style="color: #64748b; text-align: center; font-size: 0.9rem; margin-top: 20px; margin-bottom: 0;">
+            Don't have an account? <a href="{% url 'signup' %}" style="color: #2ec4b6; text-decoration: none; font-weight: 600;">Sign up here</a>
+        </p>
+    </div>
+</div>
+{% endblock %}
